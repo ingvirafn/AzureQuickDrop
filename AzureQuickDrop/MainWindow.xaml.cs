@@ -96,12 +96,7 @@ namespace AzureQuickDrop
 
         private void root_MouseEnter(object sender, MouseEventArgs e)
         {
-            var da = new DoubleAnimation(200, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
-            var daOpacity = new DoubleAnimation(1.0, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
-
-            //Storyboard sb = new Storyboard();
-            //sb.Children.Add(da);
-            //this.BeginAnimation()
+            var da = new DoubleAnimation(ACTIVE_SIZE, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
             grid.BeginAnimation(WidthProperty, da);
             grid.BeginAnimation(HeightProperty, da);
         }
@@ -118,7 +113,7 @@ namespace AzureQuickDrop
         }
         private void Mini()
         {
-            var da = new DoubleAnimation(50, new Duration(TimeSpan.FromMilliseconds(200)), FillBehavior.HoldEnd);
+            var da = new DoubleAnimation(INACTIVE_SIZE, new Duration(TimeSpan.FromMilliseconds(200)), FillBehavior.HoldEnd);
             grid.BeginAnimation(WidthProperty, da);
             grid.BeginAnimation(HeightProperty, da);
         }
