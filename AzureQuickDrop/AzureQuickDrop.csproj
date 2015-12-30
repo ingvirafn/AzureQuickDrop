@@ -90,10 +90,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApplicationLabels.resx</DependentUpon>
     </Compile>
-    <Compile Include="AzureCloudStorageUploader.cs" />
-    <Compile Include="IStorageProvider.cs" />
+    <Compile Include="Services\AzureCloudStorageUploader.cs" />
+    <Compile Include="Contracts\INotifications.cs" />
+    <Compile Include="Contracts\IStorageProvider.cs" />
     <Compile Include="ServicesFactory.cs" />
-    <Compile Include="StorageProvider.cs" />
+    <Compile Include="Services\PubNubNotifications.cs" />
+    <Compile Include="Services\StorageProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AzureQuickDrop.Contracts;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AzureQuickDrop
+namespace AzureQuickDrop.Services
 {
     [Export(typeof(IStorageProvider))]
     public class StorageProvider
@@ -21,13 +22,24 @@ namespace AzureQuickDrop
         Thread _uploadThread;
         AzureCloudStorageUploader _uploader;
 
-        public StorageProvider()
+        [ImportingConstructor]
+        public StorageProvider([Import(AllowDefault = true)] INotifications notifications)
         {
+            Notifications = notifications;
+            if (notifications != null)
+                notifications.OnReceived += Notifications_OnReceived;
             _fileQueue = new ConcurrentQueue<string>();
             _uploader = new AzureCloudStorageUploader();
             _uploadThread = new Thread(UploadThread);
             _uploadThread.Start();
         }
+
+        private void Notifications_OnReceived(object sender, string e)
+        {
+
+        }
+
+        public INotifications Notifications { get; private set; }
 
         public void EnqueUpload(string filename)
         {
@@ -67,10 +79,15 @@ namespace AzureQuickDrop
                 {
                     try
                     {
-                        await _uploader.Upload(fileName, System.IO.Path.GetFileName(fileName));
+                        await _uploader.UploadAsync(fileName);
+
                         EventHandler<string> fus = FileUploadedSuccess;
                         if (fus != null)
                             fus(this, fileName);
+
+                        if (Notifications != null)
+                            Notifications.Publish($"upload;{fileName}");
+
                     }
                     catch (Exception)
                     {

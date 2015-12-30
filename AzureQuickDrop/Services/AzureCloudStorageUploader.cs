@@ -7,28 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AzureQuickDrop
+namespace AzureQuickDrop.Services
 {
     public class AzureCloudStorageUploader
     {
-        private string _uri, _accesskey, _account, _container;
-
+        private string _accesskey, _account, _container;
+        private bool _useFullPath;
         private CloudStorageAccount csa;
         private CloudBlobClient cbc;
 
         public AzureCloudStorageUploader()
         {
-            _uri = System.Configuration.ConfigurationManager.AppSettings["uri"].ToString();
             _account = System.Configuration.ConfigurationManager.AppSettings["account"].ToString();
             _accesskey = System.Configuration.ConfigurationManager.AppSettings["accesskey"].ToString();
             _container = System.Configuration.ConfigurationManager.AppSettings["container"].ToString();
+            _useFullPath = bool.Parse(System.Configuration.ConfigurationManager.AppSettings["useFullPath"].ToString());
             csa = new CloudStorageAccount(new StorageCredentials(_account, _accesskey), true);
             cbc = csa.CreateCloudBlobClient();
         }
 
-        public async Task Upload(string fullPath, string blockName)
+        public async Task UploadAsync(string fullPath)
         {
-            var bn = blockName.Replace(@"\", @"/");
+            var bn = (_useFullPath ? fullPath : System.IO.Path.GetFileName(fullPath)).Replace(@"\", @"/");
             if (System.IO.File.Exists(fullPath))
             {
                 CloudBlobContainer container = cbc.GetContainerReference(this._container);

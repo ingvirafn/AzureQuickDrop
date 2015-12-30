@@ -15,30 +15,73 @@
         
         Height="200" 
         Width="200"
-        Opacity="0.2"
-        BorderBrush="Lime"
-        BorderThickness="1"
         
+        MouseEnter="root_MouseEnter"
+        MouseLeave="root_MouseLeave"
+        LostFocus="root_LostFocus"
         
         MouseDown="Window_MouseDown"
         Drop="root_Drop"
         KeyUp="root_KeyUp"
-        
+        Background="Transparent"
         x:Name="root"
         >
-    <Window.Background>
-        <SolidColorBrush Color="Lime"/>
-    </Window.Background>
+    
+    
     <Grid
+        Width="50"
+        Height="50"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="Lime"
+        x:Name="grid"
         >
+        <Grid.Triggers>
+                <!--<EventTrigger RoutedEvent="Grid.MouseEnter">
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard Duration="0:0:0.5">
+                            <DoubleAnimation 
+                            Storyboard.TargetName="grid" 
+                            Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                            To="2"
+                                AutoReverse="False" />
+                                <DoubleAnimation 
+                            Storyboard.TargetName="grid" 
+                            Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                            To="2"/>
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>-->
+
+                <!--<EventTrigger RoutedEvent="Grid.MouseLeave">
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard Duration="0:0:0.2">
+                                <DoubleAnimation 
+                            Storyboard.TargetName="grid" 
+                            Storyboard.TargetProperty="Width" 
+                            To="50" />
+                                <DoubleAnimation 
+                            Storyboard.TargetName="grid" 
+                            Storyboard.TargetProperty="Height" 
+                            To="50" />
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>-->
+
+        </Grid.Triggers>
+
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Viewbox Grid.Row="0" Margin="20">
-            <TextBlock Text="{Binding ElementName=root,Path=QueueLength,FallbackValue=10}" Foreground="Black"/>
+        <Viewbox Grid.Row="0" Margin="5">
+            <TextBlock Text="{Binding ElementName=root,Path=QueueLength}" Foreground="Black"/>
         </Viewbox>
-        <!--<TextBlock Text=""-->
-        
+
+        <TextBlock Text="[ESC] to exit" Grid.Row="1" FontSize="10" Margin="3" />
     </Grid>
 </Window>

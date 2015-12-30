@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AzureQuickDrop.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -28,6 +30,9 @@ namespace AzureQuickDrop
             Storage.FileUploadedSuccess += Storage_FileUploadedSuccess;
             Storage.QueueUpdated += Storage_QueueUpdated; ;
         }
+
+        private const double ACTIVE_SIZE = 200;
+        private const double INACTIVE_SIZE = 50;
 
 
         public int QueueLength
@@ -88,5 +93,35 @@ namespace AzureQuickDrop
                 Application.Current.Shutdown();
             }
         }
+
+        private void root_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var da = new DoubleAnimation(200, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
+            var daOpacity = new DoubleAnimation(1.0, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
+
+            //Storyboard sb = new Storyboard();
+            //sb.Children.Add(da);
+            //this.BeginAnimation()
+            grid.BeginAnimation(WidthProperty, da);
+            grid.BeginAnimation(HeightProperty, da);
+        }
+
+        private void root_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Mini();
+        }
+
+
+        private void root_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Mini();
+        }
+        private void Mini()
+        {
+            var da = new DoubleAnimation(50, new Duration(TimeSpan.FromMilliseconds(200)), FillBehavior.HoldEnd);
+            grid.BeginAnimation(WidthProperty, da);
+            grid.BeginAnimation(HeightProperty, da);
+        }
+
     }
 }
